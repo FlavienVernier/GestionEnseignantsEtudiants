@@ -1,0 +1,25 @@
+p
+{
+	font-size: large;
+    font-family: Calibri, Arial;
+}
+h1, h2
+{
+	font-size: x-large;
+	font-family: Calibri, Arial;
+	text-align: center;
+}
+h3
+{
+	font-size: x-large;
+	font-family: Calibri, Arial;
+}
+body
+{
+	background-color: silver;
+}
+.logofloat
+{
+	float: left;
+	font-size: 30%;
+}
