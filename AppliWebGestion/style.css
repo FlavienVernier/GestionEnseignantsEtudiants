@@ -3,6 +3,12 @@ p
 	font-size: large;
     font-family: Calibri, Arial;
 }
+h4
+{
+	font-size: large;
+    font-family: Calibri, Arial;
+    text-align: center;
+}
 h1, h2
 {
 	font-size: x-large;

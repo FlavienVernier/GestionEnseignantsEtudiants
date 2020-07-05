@@ -8,5 +8,11 @@
 
     <body>
     	<h1> Saisie de l'ensemble des cours</h1>
+    	<p> 
+    		<form method="post" enctype="multipart/form-data" action="AjouteriCal.php">
+    			Sélectionner le fichier à intégrer dans la base de donnée (fichier iCal .ics) : <input name="userfile" type="file" accept=".ics"/>
+    			<input type="submit" value="Enregistrer"/>
+    		</form>
+    	</p>
     </body>
 </html>

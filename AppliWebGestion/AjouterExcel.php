@@ -8,22 +8,23 @@
 
     <body>
     <?php
-    $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
 
     
-    //$requete = $bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ("tiery","henry",2020,"IAI","D1","D")');
+    //$bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ("tiery","henry",2020,"IAI","D1","D")');
 
     //$requete2 = $bdd->query('CREATE TABLE `test`.`etudiant` ( `id` INT NOT NULL )');
 
     
 
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $inputFileName = $_FILES["userfile"]["tmp_name"];
+    
     //$inputFileName = 'Liste_IAI3_Annecy.xls';
-
+    require($root.'/AppliWebGestion/ConfigExcel.php');
     require($root.'/AppliWebGestion/lib/PhpSpreadsheet-master/vendor/autoload.php');
+
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Reader\Xls;
 
@@ -45,7 +46,8 @@
     //var_dump($sheetData);
 
 
-// Important d'utiliser la fonctioner "identify"  si on veut utiliser $reader   
+// Important d'utiliser la fonctioner "identify"  si on veut créer un $reader sur les fichiers .xls
+    $inputFileName = $_FILES["userfile"]["tmp_name"];
     $inputFileType = IOFactory::identify($inputFileName);
     $reader = IOFactory::createReader($inputFileType);
     $reader->setLoadAllSheets();
@@ -56,24 +58,69 @@
 
    
     foreach ($loadedSheetNames as $sheetIndex => $loadedSheetName) {
-        print_r($loadedSheetName);
-        print_r($sheetIndex);
+        //print_r($loadedSheetName);
+        //print_r($sheetIndex);
         $spreadsheet->setActiveSheetIndexByName($loadedSheetName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
         //var_dump($sheetData);
         //print_r($sheetData);
-        if ($sheetIndex==0 or $sheetIndex==1)
-            for ($i = 7; $i <= 40; $i++){
-                print_r($sheetData[$i]['A']."\n");
-                print_r($sheetData[$i]['E']."\n");
-                print_r($sheetData[$i]['F']."\n");
-                print_r($sheetData[$i]['I']."\n");
-                echo('<br/>');
+        $GroupeTPtemp ='';
+        $GroupeTDtemp ='';
+        //print_r($sheetData[1]['A']."\n");
+        $spe = '';
+        $promo = 0;
+        $parcoureur2 = substr($sheetData[1]['A'], 0, 2);
+        $parcoureur3 = substr($sheetData[1]['A'], 0, 3);
+        $parcoureur4 = substr($sheetData[1]['A'], 0, 4);
+        $parcoureur5 = substr($sheetData[1]['A'], 0, 5);
+        $parcoureur9 = substr($sheetData[1]['A'], 0, 9);
+        for ($i = 0; $i <= strlen($sheetData[1]['A'])-1; $i++){
+            if ($parcoureur3 == 'IAI')
+                $spe = 'IAI';
+            if ($parcoureur4 == '3ème' or $parcoureur4 =='3eme')
+                $promo = 2;
+            if ($parcoureur9 == '2019-2020')
+                $promo = 2020 + $promo;
+            
+
+            //print_r($parcoureur2);
+            $parcoureur2 = substr($sheetData[1]['A'], $i+1, 2);
+            $parcoureur3 = substr($sheetData[1]['A'], $i+1, 3);
+            $parcoureur4 = substr($sheetData[1]['A'], $i+1, 4);
+            $parcoureur5 = substr($sheetData[1]['A'], $i+1, 5);
+            $parcoureur9 = substr($sheetData[1]['A'], $i+1, 9);
+
+            //print_r($sheetData[1]['A'][$i]);
         }
+        if ($sheetIndex==0 or $sheetIndex==1)
+            for ($i = $LiEleve1er; $i <= $LiEleveDer; $i++){
+                if ($sheetData[$i][$ColTP] != '')
+                    $GroupeTPtemp = $sheetData[$i][$ColTP];
+                if ($sheetData[$i][$ColTD] != '')
+                    $GroupeTDtemp = $sheetData[$i][$ColTD];
+
+                //if ($GroupeTPtemp == 'Groupe de TP D1')
+                  //  $GroupeTPtemp = 'D1';
+                //if ($GroupeTPtemp == 'Groupe de TP D2')
+                 //   $GroupeTPtemp = 'D2';
+                //if ($GroupeTDtemp == 'Groupe de TD D')
+                
+                //$GroupeTDtemp = 'D';
+                
+
+                if($sheetData[$i][$Colnom] !='' or $sheetData[$i][$Colprenom] !='')
+                    $bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ('.'"'.$sheetData[$i][$Colnom].'"'.','.'"'.$sheetData[$i][$Colprenom].'"'.','.$promo.','.'"'.$spe.'"'.','.'"'.$GroupeTDtemp.'"'.','.'"'.$GroupeTPtemp.'"'.')');
+
+                //$bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES (".'$sheetData[$i][$Colnom]'."',"."$sheetData[$i][$Colprenom]".",.$promo.,"."$spe".","."$GroupeTDtemp".","."$GroupeTPtemp".")');
+                //print_r($sheetData[$i][$ColTP]."\n");
+                //print_r($sheetData[$i][$Colnom]."\n");
+                //print_r($sheetData[$i][$Colprenom]."\n");
+                //print_r($sheetData[$i][$ColTD]."\n");
+                //echo('<br/>');
+            }
         
-
-
     }
+    echo("Tous les élèves ont bien été ajoutés à la base de données")
 
     
 
