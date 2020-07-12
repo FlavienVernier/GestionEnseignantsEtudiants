@@ -8,6 +8,7 @@
 
     <body>
     <?php
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
     $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
@@ -68,13 +69,16 @@
         $GroupeTDtemp ='';
         //print_r($sheetData[1]['A']."\n");
         $spe = '';
-        $promo = 0;
+        $annee = $sheetData[2]['G'];
+        $anneescolaire = $sheetData[1]['F'];
+        $promo = $annee + 5 - $anneescolaire;
+        /*
         $parcoureur2 = substr($sheetData[1]['A'], 0, 2);
         $parcoureur3 = substr($sheetData[1]['A'], 0, 3);
         $parcoureur4 = substr($sheetData[1]['A'], 0, 4);
         $parcoureur5 = substr($sheetData[1]['A'], 0, 5);
         $parcoureur9 = substr($sheetData[1]['A'], 0, 9);
-        for ($i = 0; $i <= strlen($sheetData[1]['A'])-1; $i++){
+        for ($i = 0; $i < strlen($sheetData[1]['A']); $i++){
             if ($parcoureur3 == 'IAI')
                 $spe = 'IAI';
             if ($parcoureur4 == '3ème' or $parcoureur4 =='3eme')
@@ -92,11 +96,13 @@
 
             //print_r($sheetData[1]['A'][$i]);
         }
+        */
+        $spe = $sheetData[1]['E'];
         if ($sheetIndex==0 or $sheetIndex==1)
             for ($i = $LiEleve1er; $i <= $LiEleveDer; $i++){
-                if ($sheetData[$i][$ColTP] != '')
+                if ($sheetData[$i][$ColTP] != NULL and $sheetData[$i][$ColTP] != '')
                     $GroupeTPtemp = $sheetData[$i][$ColTP];
-                if ($sheetData[$i][$ColTD] != '')
+                if ($sheetData[$i][$ColTD] != NULL and $sheetData[$i][$ColTD] != '')
                     $GroupeTDtemp = $sheetData[$i][$ColTD];
 
                 //if ($GroupeTPtemp == 'Groupe de TP D1')
@@ -108,15 +114,10 @@
                 //$GroupeTDtemp = 'D';
                 
 
-                if($sheetData[$i][$Colnom] !='' or $sheetData[$i][$Colprenom] !='')
+                if($sheetData[$i][$Colnom] != NULL and $sheetData[$i][$Colprenom] != NULL and $sheetData[$i][$Colnom] !='' and $sheetData[$i][$Colprenom] !='')
                     $bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ('.'"'.$sheetData[$i][$Colnom].'"'.','.'"'.$sheetData[$i][$Colprenom].'"'.','.$promo.','.'"'.$spe.'"'.','.'"'.$GroupeTDtemp.'"'.','.'"'.$GroupeTPtemp.'"'.')');
 
                 //$bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES (".'$sheetData[$i][$Colnom]'."',"."$sheetData[$i][$Colprenom]".",.$promo.,"."$spe".","."$GroupeTDtemp".","."$GroupeTPtemp".")');
-                //print_r($sheetData[$i][$ColTP]."\n");
-                //print_r($sheetData[$i][$Colnom]."\n");
-                //print_r($sheetData[$i][$Colprenom]."\n");
-                //print_r($sheetData[$i][$ColTD]."\n");
-                //echo('<br/>');
             }
         
     }

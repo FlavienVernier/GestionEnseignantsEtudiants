@@ -7,6 +7,18 @@
     </head>
 
     <body>
-    	<h1> Saisie du Cours à modifier</h1>
+    	<h1> Saisie du Cours à ajouter</h1>
+    	<h4> 
+    		<form method="post" action="AjouterCours.php">
+    		Nom : <select name="type" id="type">
+    			<option value='CM'>CM</option>
+    			<option value='TD'>TD</option>
+    			<option value='TP'>TP</option>
+    			</select>
+    		Date (en format [YYYY-MM-DD HH:ii:ss]) : <input type="text" name="Date" />
+    		durée en heure (ex : 1h30 => entrer 1.5): <input type="float" name="heure" />
+    		</select>
+    	<input type="submit" value="Enregistrer"/>
+    	</form>
     </body>
 </html>

@@ -5,5 +5,4 @@ $Colnom = 'E';
 $Colprenom = 'F';
 $ColTD = 'I';
 $LiEleveDer = 40;
-$NOMColTP
 ?>
