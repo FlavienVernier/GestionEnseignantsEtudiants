@@ -9,13 +9,14 @@
     <body>
     <?php 
     if ($_POST['choix']==='cours')
-        header("Location: http://localhost/AppliWebGestion/SaisieCours.html");
+        header("Location: SaisieCours.html");
     if ($_POST['choix']==='module')
-        header("Location: http://localhost/AppliWebGestion/SaisieModule.php");
+        header("Location: SaisieModule.php");
     if ($_POST['choix']==='enseignant')
-        header("Location: http://localhost/AppliWebGestion/SaisieEnseignant.html");
+        header("Location: SaisieEnseignant.html");
     if ($_POST['choix']==='etudiant')
-        header("Location: http://localhost/AppliWebGestion/SaisieEtudiant.html"); ?>
+        header("Location: SaisieEtudiant.html");?>
+
         
     
     </body>

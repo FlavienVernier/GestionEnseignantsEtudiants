@@ -69,7 +69,7 @@
         $GroupeTDtemp ='';
         //print_r($sheetData[1]['A']."\n");
         $spe = '';
-        $annee = $sheetData[2]['G'];
+        $annee = substr($sheetData[2]['G'], 5, 4);
         $anneescolaire = $sheetData[1]['F'];
         $promo = $annee + 5 - $anneescolaire;
         /*

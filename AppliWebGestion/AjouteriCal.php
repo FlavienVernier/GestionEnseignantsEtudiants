@@ -8,16 +8,22 @@
 
     <body>
     <?php
+//PARAMETRE INFORMANT L'ANNEE COURRANTE D'ETUDE :
+    echo("Veuillez patienter, traitement en cours");
+    echo('<br/>');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
     $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $datafiliere = $bdd->query('SELECT DISTINCT filiere FROM enseignementpolytech1.etudiant ');
-    $dataprof = $bdd->query('SELECT * FROM enseignementpolytech1.enseignant ');
+    $datafiliere = $bdd->query('SELECT DISTINCT filiere FROM enseignementpolytech1.etudiant');
+    $dataprof = $bdd->query('SELECT * FROM enseignementpolytech1.enseignant');
+    $datamodules = $bdd->query('SELECT DISTINCT nom FROM enseignementpolytech1.module');
     $Listefiliere = $datafiliere->fetchAll();
     $ListeEnseignants = $dataprof->fetchAll();
+    $Listemodules = $datamodules->fetchAll();
 
-    //print_r($ListeEnseignants);
+
+    //print_r($Listemodules);
 
     $root = $_SERVER['DOCUMENT_ROOT'];
 
@@ -46,6 +52,13 @@
         $StringDateStart = $lines['VEVENT'][$i]['DTSTART'];
         $StringLeCours = $lines['VEVENT'][$i]['SUMMARY'];
         $StringClasseProf = $lines['VEVENT'][$i]['DESCRIPTION'];
+        $StringAnnee = substr($lines['VEVENT'][$i]['DTSTAMP'], 0, 8);
+        if ((int)substr($StringAnnee, 4, 2)<=7){
+            $anneecourante = (int)substr($StringAnnee, 0, 4);
+        }
+        else{
+            $anneecourante = (int)substr($StringAnnee, 0, 4)+1;
+        }
 
 
         //$date = DateTime::createFromFormat($format, substr($lines['VEVENT'][$i]['DTSTART'], 6, 2).'/'.substr($lines['VEVENT'][$i]['DTSTART'], 4, 2).'/'.substr($lines['VEVENT'][$i]['DTSTART'], 0, 4).' '.substr($lines['VEVENT'][$i]['DTSTART'], 9, 2).':'.substr($lines['VEVENT'][$i]['DTSTART'], 11, 2).':'.substr($lines['VEVENT'][$i]['DTSTART'], 13, 2));
@@ -94,7 +107,9 @@
             if($StringClasseProf[$l]=='-'){
                 if($StringClasseProf[$l+1]=='S')
                     continue;
-                $annee=$StringClasseProf[$l+1];
+                if($annee==''){
+                    $annee=$StringClasseProf[$l+1];
+                }
                 //print_r($parcoureur);
                 //echo('<br/>');
                 //print_r($annee);
@@ -150,14 +165,14 @@
         //PARCOURIR LE STRING SUMMARY AVEC LE NOM DU COURS
         $parcoureur='';
         $nomcours='';
-        $typecours='CM';//Par défaut, le cours est un CM.
+        $typecours='TP';//Par défaut, le cours est un TP.
+        
         $l=0;
         for($l; $l<strlen($StringLeCours); $l++){
-            if($StringLeCours[$l]!="_"){
+            if($StringLeCours[$l]!="_" and $StringLeCours[$l]!="-"){
                 $parcoureur.=$StringLeCours[$l];
             }
-            if($StringLeCours[$l]=='_'){
-                $nomcours=$parcoureur;
+            if($StringLeCours[$l]=='_' or $StringLeCours[$l]=='-'){
                 $parcoureur='';
             }
             if($parcoureur=='CM'){
@@ -172,37 +187,65 @@
                 $typecours='TP';
                 break;
             }
+            if(strlen($parcoureur)==7){
+                $p=0;
+                for($p=0;$p<count($Listemodules);$p++){
+                    if($Listemodules[$p]['nom']==$parcoureur){
+                        $nomcours=$parcoureur;
+                    }
+                }
+            }
         }
         //print_r($nomcours);
         //echo('<br/>');
         //print_r($typecours);
         //echo('<br/>');
 
+        if (substr($nomcours, 0, 4)=='LANG'){
+            $typecours='TD';
+        }
+
         $idduprof =0;
-        $idmodule =0;
+        $iddumodule =0;
         //print_r($nomprof);
         //print_r($prenomprof);
         $idprof = $bdd->query('SELECT idenseignant FROM enseignementpolytech1.enseignant WHERE (nom = "'.$nomprof.'") and (prenom ="'.$prenomprof.'")');
         $idprof2 = $idprof->fetchAll();
+        $idmodule = $bdd->query('SELECT idmodule FROM enseignementpolytech1.module WHERE (nom = "'.$nomcours.'")');
+        $idmodule2 = $idmodule->fetchAll();
 
         //print_r($idprof2[0]['idenseignant']);
+
     
         $idduprof = $idprof2[0]['idenseignant'];
+        $iddumodule = $idmodule2[0]['idmodule'];
+        
+        if ($idduprof!=0 and $iddumodule!=0)
+            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idmodule,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.','.$idduprof.')');
+        if ($iddumodule!=0 and $idduprof==0)
+            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idmodule) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.')');
+        if ($iddumodule==0 and $idduprof!=0)
+            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idduprof.')');
+        if ($iddumodule==0 and $idduprof==0)
+            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.')');
+
+        $datadernieridcours = $bdd->query('SELECT MAX(idcours) FROM enseignementpolytech1.cours');
+        $dernieridcours = $datadernieridcours->fetchAll();
         
 
-        if ($idduprof!=0 and $idmodule!=0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,heure,idmodule,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idmodule.','.$idduprof.')');
-        if ($idmodule!=0 and $idduprof==0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,heure,idmodule) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idmodule.')');
-        if ($idmodule==0 and $idduprof!=0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,heure,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idduprof.')');
-        if ($idmodule==0 and $idduprof==0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,heure) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.')');
+        $promosql = $anneecourante+5-$annee;
 
+        $dataetudiantconcernes = $bdd->query('SELECT idetudiant FROM enseignementpolytech1.etudiant WHERE (promo='.$promosql.' AND filiere="'.$filiere.'")');
+        $etudiantconcernes = $dataetudiantconcernes->fetchAll();
+        $et=0;
+        for($et=0; $et<count($etudiantconcernes);$et++){
+            $bdd->query('INSERT INTO enseignementpolytech1.presence (idetudiant,idcours) VALUES ('.'"'.$etudiantconcernes[$et]['idetudiant'].'"'.','."'".$dernieridcours[0]['MAX(idcours)']."'".')');
+        }
+        
 
     }
 
-    echo("Tous les cours ont bien été ajoutés à la base de données")
+    echo("Tous les cours ont bien été ajoutés à la base de données");
 
     ?>
     </body>

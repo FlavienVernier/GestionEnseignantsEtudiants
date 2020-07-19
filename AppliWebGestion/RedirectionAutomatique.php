@@ -9,9 +9,9 @@
     <body>
     <?php 
     if ($_POST['choix']==='cours')
-        header("Location: http://localhost/AppliWebGestion/SaisieListeCours.html");
+        header("Location: SaisieListeCours.html");
     if ($_POST['choix']==='etudiants')
-        header("Location: http://localhost/AppliWebGestion/SaisieListeEtudiant.html"); ?>
+        header("Location: SaisieListeEtudiant.html");?>
         
     
     </body>
