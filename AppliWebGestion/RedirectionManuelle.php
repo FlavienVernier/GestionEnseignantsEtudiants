@@ -7,7 +7,8 @@
     </head>
 
     <body>
-    <?php 
+    <?php
+    require_once('Config.php');
     if ($_POST['choix']==='cours')
         header("Location: SaisieCours.html");
     if ($_POST['choix']==='module')

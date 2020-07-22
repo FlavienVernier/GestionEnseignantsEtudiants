@@ -11,8 +11,9 @@
 //PARAMETRE INFORMANT L'ANNEE COURRANTE D'ETUDE :
     echo("Veuillez patienter, traitement en cours");
     echo('<br/>');
+    require_once('Config.php');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $datafiliere = $bdd->query('SELECT DISTINCT filiere FROM enseignementpolytech1.etudiant');
@@ -27,7 +28,8 @@
 
     $root = $_SERVER['DOCUMENT_ROOT'];
 
-    require($root.'/AppliWebGestion/iCalEasyReader.php');
+    //require_once($root.'/AppliWebGestion/iCalEasyReader.php');
+    require_once('iCalEasyReader.php');
 
     $ical = new iCalEasyReader();
     $lines = $ical->load(file_get_contents($_FILES["userfile"]["tmp_name"]));
@@ -165,7 +167,7 @@
         //PARCOURIR LE STRING SUMMARY AVEC LE NOM DU COURS
         $parcoureur='';
         $nomcours='';
-        $typecours='TP';//Par défaut, le cours est un TP.
+        
         
         $l=0;
         for($l; $l<strlen($StringLeCours); $l++){

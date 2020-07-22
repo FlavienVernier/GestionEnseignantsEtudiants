@@ -13,8 +13,9 @@
 
         
     <?php
+    require_once('Config.php');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     

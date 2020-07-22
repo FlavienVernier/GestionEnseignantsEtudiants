@@ -8,6 +8,7 @@
 
     <body>
     <?php 
+    require_once('Config.php');
     if ($_POST['choix']==='cours')
         header("Location: SaisieListeCours.html");
     if ($_POST['choix']==='etudiants')

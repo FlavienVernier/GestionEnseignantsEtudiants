@@ -8,8 +8,9 @@
 
     <body>
     <?php
+    require_once('Config.php');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=enseignementpolytech1;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
 
@@ -23,8 +24,8 @@
     $root = $_SERVER['DOCUMENT_ROOT'];
     
     //$inputFileName = 'Liste_IAI3_Annecy.xls';
-    require($root.'/AppliWebGestion/ConfigExcel.php');
-    require($root.'/AppliWebGestion/lib/PhpSpreadsheet-master/vendor/autoload.php');
+    require_once('Config.php');
+    require_once('lib/PhpSpreadsheet-master/vendor/autoload.php');
 
     use PhpOffice\PhpSpreadsheet\IOFactory;
     use PhpOffice\PhpSpreadsheet\Reader\Xls;
