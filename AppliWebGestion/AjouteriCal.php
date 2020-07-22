@@ -16,9 +16,9 @@
     $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $datafiliere = $bdd->query('SELECT DISTINCT filiere FROM enseignementpolytech1.etudiant');
-    $dataprof = $bdd->query('SELECT * FROM enseignementpolytech1.enseignant');
-    $datamodules = $bdd->query('SELECT DISTINCT nom FROM enseignementpolytech1.module');
+    $datafiliere = $bdd->query('SELECT DISTINCT filiere FROM '.$bdName.'.etudiant');
+    $dataprof = $bdd->query('SELECT * FROM '.$bdName.'.enseignant');
+    $datamodules = $bdd->query('SELECT DISTINCT nom FROM '.$bdName.'.module');
     $Listefiliere = $datafiliere->fetchAll();
     $ListeEnseignants = $dataprof->fetchAll();
     $Listemodules = $datamodules->fetchAll();
@@ -26,7 +26,7 @@
 
     //print_r($Listemodules);
 
-    $root = $_SERVER['DOCUMENT_ROOT'];
+    
 
     //require_once($root.'/AppliWebGestion/iCalEasyReader.php');
     require_once('iCalEasyReader.php');
@@ -211,9 +211,9 @@
         $iddumodule =0;
         //print_r($nomprof);
         //print_r($prenomprof);
-        $idprof = $bdd->query('SELECT idenseignant FROM enseignementpolytech1.enseignant WHERE (nom = "'.$nomprof.'") and (prenom ="'.$prenomprof.'")');
+        $idprof = $bdd->query('SELECT idenseignant FROM '.$bdName.'.enseignant WHERE (nom = "'.$nomprof.'") and (prenom ="'.$prenomprof.'")');
         $idprof2 = $idprof->fetchAll();
-        $idmodule = $bdd->query('SELECT idmodule FROM enseignementpolytech1.module WHERE (nom = "'.$nomcours.'")');
+        $idmodule = $bdd->query('SELECT idmodule FROM '.$bdName.'.module WHERE (nom = "'.$nomcours.'")');
         $idmodule2 = $idmodule->fetchAll();
 
         //print_r($idprof2[0]['idenseignant']);
@@ -223,25 +223,25 @@
         $iddumodule = $idmodule2[0]['idmodule'];
         
         if ($idduprof!=0 and $iddumodule!=0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idmodule,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.','.$idduprof.')');
+            $bdd->query('INSERT INTO '.$bdName.'.cours (type,datecours,duree,idmodule,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.','.$idduprof.')');
         if ($iddumodule!=0 and $idduprof==0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idmodule) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.')');
+            $bdd->query('INSERT INTO '.$bdName.'.cours (type,datecours,duree,idmodule) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$iddumodule.')');
         if ($iddumodule==0 and $idduprof!=0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idduprof.')');
+            $bdd->query('INSERT INTO '.$bdName.'.cours (type,datecours,duree,idenseignant) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.','.$idduprof.')');
         if ($iddumodule==0 and $idduprof==0)
-            $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.')');
+            $bdd->query('INSERT INTO '.$bdName.'.cours (type,datecours,duree) VALUES ('.'"'.$typecours.'"'.','."'".$date."'".','.$dureecours.')');
 
-        $datadernieridcours = $bdd->query('SELECT MAX(idcours) FROM enseignementpolytech1.cours');
+        $datadernieridcours = $bdd->query('SELECT MAX(idcours) FROM '.$bdName.'.cours');
         $dernieridcours = $datadernieridcours->fetchAll();
         
 
         $promosql = $anneecourante+5-$annee;
 
-        $dataetudiantconcernes = $bdd->query('SELECT idetudiant FROM enseignementpolytech1.etudiant WHERE (promo='.$promosql.' AND filiere="'.$filiere.'")');
+        $dataetudiantconcernes = $bdd->query('SELECT idetudiant FROM '.$bdName.'.etudiant WHERE (promo='.$promosql.' AND filiere="'.$filiere.'")');
         $etudiantconcernes = $dataetudiantconcernes->fetchAll();
         $et=0;
         for($et=0; $et<count($etudiantconcernes);$et++){
-            $bdd->query('INSERT INTO enseignementpolytech1.presence (idetudiant,idcours) VALUES ('.'"'.$etudiantconcernes[$et]['idetudiant'].'"'.','."'".$dernieridcours[0]['MAX(idcours)']."'".')');
+            $bdd->query('INSERT INTO '.$bdName.'.presence (idetudiant,idcours) VALUES ('.'"'.$etudiantconcernes[$et]['idetudiant'].'"'.','."'".$dernieridcours[0]['MAX(idcours)']."'".')');
         }
         
 

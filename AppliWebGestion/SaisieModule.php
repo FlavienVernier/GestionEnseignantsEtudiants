@@ -19,7 +19,7 @@
     		require_once('Config.php');
     		$bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     		$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    		$dataprof = $bdd->query('SELECT * FROM enseignementpolytech1.enseignant ');
+    		$dataprof = $bdd->query('SELECT * FROM '.$bdName.'.enseignant ');
     		$ListeEnseignants = $dataprof->fetchAll();
     		echo'Enseignant responsable  :';
     		echo'<select name="idprof" id="idprof">';
@@ -28,8 +28,8 @@
     			echo'<option value='.($i+1).'>'.$ListeEnseignants[$i]['nom'].' '.$ListeEnseignants[$i]['prenom'].'</option>';
     		}
     		echo'</select>';?>
-    	<input type="submit" value="Enregistrer"/>
-    	</form>
+    		<input type="submit" value="Enregistrer"/>
+    		</form>
     	 </h4>
     </body>
 </html>

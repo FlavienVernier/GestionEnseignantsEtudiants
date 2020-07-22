@@ -16,7 +16,7 @@
     
 
 
-    $bdd->query('INSERT INTO enseignementpolytech1.enseignant (nom,prenom,type,service,heuresup) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['Prenom'].'"'.','."'".$_POST['type']."'".','.'"'.$_POST['service'].'"'.','.'"'.$_POST['heuresupp'].'"'.')');
+    $bdd->query('INSERT INTO '.$bdName.'.enseignant (nom,prenom,type,service,heuresup) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['Prenom'].'"'.','."'".$_POST['type']."'".','.'"'.$_POST['service'].'"'.','.'"'.$_POST['heuresupp'].'"'.')');
     echo("L'enseignant a bien été ajouté à la base de données");
     ?>
     </body>

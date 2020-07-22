@@ -18,9 +18,9 @@
     $idprof = $_POST['idprof'];
 
     if ($idprof==0)
-        $bdd->query('INSERT INTO enseignementpolytech1.module (nom,semestre,heurescm,heurestd,heurestp) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['semestre'].'"'.','."'".$_POST['heurescm']."'".','.'"'.$_POST['heurestd'].'"'.','.'"'.$_POST['heurestp'].'"'.')');
+        $bdd->query('INSERT INTO '.$bdName.'.module (nom,semestre,heurescm,heurestd,heurestp) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['semestre'].'"'.','."'".$_POST['heurescm']."'".','.'"'.$_POST['heurestd'].'"'.','.'"'.$_POST['heurestp'].'"'.')');
     else{
-        $bdd->query('INSERT INTO enseignementpolytech1.module (nom,semestre,heurescm,heurestd,heurestp,idenseignant) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['semestre'].'"'.','."'".$_POST['heurescm']."'".','.'"'.$_POST['heurestd'].'"'.','.'"'.$_POST['heurestp'].'"'.','.'"'.$idprof.'"'.')');
+        $bdd->query('INSERT INTO '.$bdName.'.module (nom,semestre,heurescm,heurestd,heurestp,idenseignant) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['semestre'].'"'.','."'".$_POST['heurescm']."'".','.'"'.$_POST['heurestd'].'"'.','.'"'.$_POST['heurestp'].'"'.','.'"'.$idprof.'"'.')');
     }
     echo("Le module a bien été ajouté à la base de données");
     ?>

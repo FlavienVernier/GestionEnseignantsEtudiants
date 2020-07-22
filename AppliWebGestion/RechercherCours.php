@@ -21,7 +21,7 @@
     
 
     if ($_POST['filiere']=='NULL'){
-        $datacoursincomplets = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM enseignementpolytech1.cours WHERE (datecours LIKE "'.$_POST['Date'].'%'.'") and ( (idmodule IS NULL) OR (idenseignant IS NULL) )');
+        $datacoursincomplets = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (datecours LIKE "'.$_POST['Date'].'%'.'") and ( (idmodule IS NULL) OR (idenseignant IS NULL) )');
         $coursincomplets = $datacoursincomplets->fetchall();
         //print_r($coursincomplets);
         //var_dump($coursincomplets);
@@ -37,7 +37,7 @@
         $nomduprof='Non renseigné, ajouter (nom enseignant):';
         echo('Date et heure : '.$coursincomplets[$i]['datecours'].'');
         if ($coursincomplets[$i]['idmodule'] != NULL){
-            $datanommodule = $bdd->query('SELECT nom FROM enseignementpolytech1.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
+            $datanommodule = $bdd->query('SELECT nom FROM '.$bdName.'.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
             $nommodule= $datanommodule->fetchall();
             $nomdumodule = $nommodule[0]['nom'];
             echo(' | Module : '.$nomdumodule.'');
@@ -49,7 +49,7 @@
         }
         
         if ($coursincomplets[$i]['idenseignant'] != NULL){
-            $datanomprof = $bdd->query('SELECT nom FROM enseignementpolytech1.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
+            $datanomprof = $bdd->query('SELECT nom FROM '.$bdName.'.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
             $nomprof= $datanomprof->fetchall();
             $nomduprof = $nomprof[0]['idenseignant'];
             echo(' | Enseignant : '.$nomduprof.'');

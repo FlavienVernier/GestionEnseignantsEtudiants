@@ -21,7 +21,6 @@
 
     
 
-    $root = $_SERVER['DOCUMENT_ROOT'];
     
     //$inputFileName = 'Liste_IAI3_Annecy.xls';
     require_once('Config.php');
@@ -116,7 +115,7 @@
                 
 
                 if($sheetData[$i][$Colnom] != NULL and $sheetData[$i][$Colprenom] != NULL and $sheetData[$i][$Colnom] !='' and $sheetData[$i][$Colprenom] !='')
-                    $bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ('.'"'.$sheetData[$i][$Colnom].'"'.','.'"'.$sheetData[$i][$Colprenom].'"'.','.$promo.','.'"'.$spe.'"'.','.'"'.$GroupeTDtemp.'"'.','.'"'.$GroupeTPtemp.'"'.')');
+                    $bdd->query('INSERT INTO '.$bdName.'.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES ('.'"'.$sheetData[$i][$Colnom].'"'.','.'"'.$sheetData[$i][$Colprenom].'"'.','.$promo.','.'"'.$spe.'"'.','.'"'.$GroupeTDtemp.'"'.','.'"'.$GroupeTPtemp.'"'.')');
 
                 //$bdd->query('INSERT INTO enseignementpolytech1.etudiant (nom,prenom,promo,filiere,groupetd,groupetp) VALUES (".'$sheetData[$i][$Colnom]'."',"."$sheetData[$i][$Colprenom]".",.$promo.,"."$spe".","."$GroupeTDtemp".","."$GroupeTPtemp".")');
             }

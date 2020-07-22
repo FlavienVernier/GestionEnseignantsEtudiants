@@ -17,7 +17,7 @@
     
 
 
-    $bdd->query('INSERT INTO enseignementpolytech1.cours (type,datecours,duree) VALUES ('.'"'.$_POST['type'].'"'.','.'"'.$_POST['Date'].'"'.','."'".(float)$_POST['heure']."'".')');
+    $bdd->query('INSERT INTO '.$bdName.'.cours (type,datecours,duree) VALUES ('.'"'.$_POST['type'].'"'.','.'"'.$_POST['Date'].'"'.','."'".(float)$_POST['heure']."'".')');
     echo("Le cours a bien été ajouté à la base de données");
     ?>
     </body>
