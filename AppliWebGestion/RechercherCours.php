@@ -49,7 +49,7 @@
         }
         
         if ($coursincomplets[$i]['idenseignant'] != NULL){
-            $datanomprof = $bdd->query('SELECT nom FROM '.$bdName.'.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
+            $datanomprof = $bdd->query('SELECT nom FROM '.$bdName.'.enseignant WHERE (idenseignant='.$coursincomplets[$i]['idenseignant'].')');
             $nomprof= $datanomprof->fetchall();
             $nomduprof = $nomprof[0]['idenseignant'];
             echo(' | Enseignant : '.$nomduprof.'');
