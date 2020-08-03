@@ -22,7 +22,7 @@
 
     $anneecourante = (int)date('Y');
     $moiscourrant = (int)date('m');
-    if ($moiscourrant >7){
+    if ($moiscourrant >9){//ATTENTION, mettre la limite au mois >7 en fin de projet
         $anneecourante = $anneecourante + 1;
     }
 
@@ -42,6 +42,10 @@
     echo(' | Classe : '.$_POST['filiere'].' '.$_POST['annee']);
     echo('<br/>');
     echo('<form method="post" action="Impression.php">');
+    echo('<input type="hidden" name=filiere value='.$_POST['filiere'].' />');
+    echo('<input type="hidden" name=promo value='.$promo.' />');
+    echo('<input type="hidden" name=annee value='.$_POST['annee'].' />');
+    echo('<input type="hidden" name=Date value='.$_POST['Date'].' />');
     $ncours=0;
     for ($i=0; $i<count($idcours);$i++){
         $datalecours = $bdd->query('SELECT type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (idcours='.$idcours[$i]['idcours'].') and (datecours LIKE "'.$_POST['Date'].'%'.'")');
@@ -49,8 +53,9 @@
         
         if (count($lecours)!=0){
             $ncours+=1;
-            $nomdumodule='Non renseigné';
-            $nomduprof='Non renseigné:';
+            $nomdumodule='Nonrenseigné';
+            $nomduprof='Nonrenseigné:';
+            $typecours = $lecours[0]['type'];
             $duration = $lecours[0]['duree']*60;
             $durationheure = intdiv($duration,60);
             $durationminutes = $duration%60;
@@ -75,10 +80,10 @@
             }
             echo(' | Enseignant : '.$nomduprof.'');
             echo('<br/>');
-            echo('<input type="hidden" name='.'type'.$ncours.' value=n />');
-            echo('<input type="hidden" name='.'module'.$ncours.' value=n />');
-            echo('<input type="hidden" name='.'enseignant'.$ncours.' value=n />');
-            echo('<input type="hidden" name='.'heure'.$ncours.' value=n />');
+            echo('<input type="hidden" name='.'type'.$ncours.' value='.$typecours.' />');
+            echo('<input type="hidden" name='.'module'.$ncours.' value='.$nomdumodule.' />');
+            echo('<input type="hidden" name='.'enseignant'.$ncours.' value='.$nomduprof.' />');
+            echo('<input type="hidden" name='.'heure'.$ncours.' value='.substr($lecours[0]['datecours'],11,2).'h'.substr($lecours[0]['datecours'],14,2).' />');
 
         }
         
@@ -87,7 +92,7 @@
     
     echo('</h5>');
     echo('Tous les cours pour la fiche absence ont été affichés ');
-    echo('<input type="submit" value="Imprimer"/>');
+    echo('<input type="submit" value="Imprimer" />');
     echo('</form>');
     
     
