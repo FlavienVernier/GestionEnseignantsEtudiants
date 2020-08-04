@@ -12,6 +12,7 @@
     		<br/>
     		<form method="post" action="Apercu.php">
     			<?php
+    			//Implémentation d'un code PHP ici pour préremplir le champ de texte par la date actuelle.
     			$currentdate = date('Y-m-d');
     		echo('Sélection du jour : [YYYY-MM-DD]): <input type="text" name="Date" value="'.$currentdate.'" /> <input type="submit" value="Aperçu"/>');
     		?>

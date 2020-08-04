@@ -16,6 +16,7 @@
     		heurestd  : <input type="int" name="heurestd" />
     		heurestp  : <input type="int" name="heurestp" />
     		<?php
+    		// Ici, on intègre du code PHP dans le but d'extraire tous les noms d'enseignant dans la base de données et de générer une liste déroulante pour sélectionner l'enseignant en charge du module.
     		require_once('Config.php');
     		$bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     		$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,6 +25,7 @@
     		echo'Enseignant responsable  :';
     		echo'<select name="idprof" id="idprof">';
     		echo'<option value='.'0'.'>'.'non défini'.'</option>';
+    		//On crée une boucle for pour ajouter chaque enseignant dans la liste déroulante
     		for($i=0; $i<count($ListeEnseignants); $i++){
     			echo'<option value='.($i+1).'>'.$ListeEnseignants[$i]['nom'].' '.$ListeEnseignants[$i]['prenom'].'</option>';
     		}

@@ -125,8 +125,8 @@
     }
     
     $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A2:X24,A26:X48');
-    $spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-    $spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->getStartColor()->setARGB('FF9E9E9E');
+    //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+    //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->getStartColor()->setARGB('FF9E9E9E');
     $spreadsheet->getActiveSheet()->setShowGridlines(true);
 
     //$sheetData = $spreadsheet->getActiveSheet()->toArray(true, true, true, true);

@@ -12,11 +12,9 @@
     $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    //$donnees = $_POST;
-
-    //$idenseignant = NULL;
     $idprof = $_POST['idprof'];
-
+    //Selon si un enseignant a été sélectionné ou non, on l'identifie selon l'id de l'enseignant transmis par le forumaire
+    //L'ID 0 correspond à la non sélection d'un enseignant, on le distingue alors dans un if qui va réaliser une requete SQL de l'ajout du module sans qu'il ne soit encore lié à un enseignant.
     if ($idprof==0)
         $bdd->query('INSERT INTO '.$bdName.'.module (nom,semestre,heurescm,heurestd,heurestp) VALUES ('.'"'.$_POST['Nom'].'"'.','.'"'.$_POST['semestre'].'"'.','."'".$_POST['heurescm']."'".','.'"'.$_POST['heurestd'].'"'.','.'"'.$_POST['heurestp'].'"'.')');
     else{

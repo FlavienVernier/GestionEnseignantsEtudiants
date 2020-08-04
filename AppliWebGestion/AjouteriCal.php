@@ -8,7 +8,9 @@
 
     <body>
     <?php
-//PARAMETRE INFORMANT L'ANNEE COURRANTE D'ETUDE :
+//REMARQUE IMPORTANTE, A LIRE :
+//Ce fichier est une ancienne version de "AjouteriCalV2.php" et ne supporte pas le cas ou plusieurs classes sont concernés par un cours.
+//Ce fichier est conservé pour une sauvegarde.
     echo("Veuillez patienter, traitement en cours");
     echo('<br/>');
     require_once('Config.php');
