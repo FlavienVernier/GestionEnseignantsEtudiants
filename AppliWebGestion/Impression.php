@@ -7,16 +7,17 @@
     </head>
 
     <body>
-        <h1>Liste des cours à imprimer</h1>
         <p>
         <br/>
+        <h4>
 
         
     <?php
-    echo("Veuillez patienter, traitement en cours");
+    
     echo('<br/>');
     require_once('Config.php');
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
     $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -33,7 +34,7 @@
     use PhpOffice\PhpSpreadsheet\Reader\Xls;
     use PhpOffice\PhpSpreadsheet\Style\Style;
     use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-
+    
     $inputFileType = IOFactory::identify('Liste_IDU3_S6FicheAbsenceUPDATED.ods');
     $reader = IOFactory::createReader($inputFileType);
     $reader->setReadDataOnly(false);
@@ -106,13 +107,15 @@
             $enseignant='enseignant5';
             $heure='heure5';
         }
+        
+        
         $spreadsheet->getActiveSheet()->setCellValue($CellFiliere, $_POST['filiere']);
         $spreadsheet->getActiveSheet()->setCellValue($CellAnnee, $_POST['annee']);
         $spreadsheet->getActiveSheet()->setCellValue($CellModule, $_POST[$module]);
         $spreadsheet->getActiveSheet()->setCellValue($CellHeure, $_POST[$heure]);
         $spreadsheet->getActiveSheet()->setCellValue($CellType, $_POST[$type]);
         $spreadsheet->getActiveSheet()->setCellValue($CellEnseignant, $_POST[$enseignant]);
-
+        
 
         for($k=0;$k<count($etudiants);$k++){
             $ligne = $FirstLigneEtu1+$k;
@@ -124,23 +127,42 @@
         }
     }
     
-    $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A2:X24,A26:X48');
+    //$spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A2:X24,A26:X48');
     //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
     //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->getStartColor()->setARGB('FF9E9E9E');
-    $spreadsheet->getActiveSheet()->setShowGridlines(true);
+    //$spreadsheet->getActiveSheet()->setShowGridlines(true);
 
     //$sheetData = $spreadsheet->getActiveSheet()->toArray(true, true, true, true);
     //var_dump($sheetData);
 
-    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, "Ods");
-    $writer->save("Ficheaimprimer.ods");
-    
+    //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, "Ods");
+    //$writer->save("Ficheaimprimer.ods");
 
+    //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Mpdf');
+    $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+    $ListeEtudiants='';
+    $ladate = '2020-11-21 08:00:00';
     
+    /*
+    $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (listeetudiants,dateday,filiere,promo) VALUES ('.$ListeEtudiants.','.$_POST['date'].','.$_POST['filiere'].','.(int)$_POST['promo'].')');
+    */
+
+
+    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);
+    $pdf_path = 'Ficheaimprimer.pdf';
     
-    
+    $writer->save($pdf_path);
+
+
+
+
+    echo('Fiche prête pour impression');
+    echo('<br/>');
+    echo('<a href="Ficheaimprimer.pdf">Afficher le PDF pour impression</a>')
     
     ?>
+    </h4>
     </p>
     </body>
 </html>

@@ -8,7 +8,7 @@
 
     <body>
         <h1>Liste des cours à imprimer</h1>
-        <h4>Vérifiez si les cours correspondent bien à ceux de la journée, puis cliquez sur "Imprimer"
+        <h4>Vérifiez si les cours correspondent bien à ceux de la journée, puis cliquez sur "Générer le PDF"</h4>
         <br/>
 
         
@@ -88,11 +88,16 @@
         }
         
     }
+
+
+
     echo('<input type="hidden" name=ncours value='.$ncours.' />');
     
     echo('</h5>');
     echo('Tous les cours pour la fiche absence ont été affichés ');
-    echo('<input type="submit" value="Imprimer" />');
+    echo('<input type="submit" value="Générer le PDF" />');
+    echo('<br/>');
+    echo("Veuillez patienter lors de la génération du PDF");
     echo('</form>');
     
     

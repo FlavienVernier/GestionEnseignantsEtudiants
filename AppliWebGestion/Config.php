@@ -24,6 +24,7 @@ $typecours='TP';//Par défaut, le cours est considéré comme un TP.
 
 //Paramètres pour Impression.php
 // Les paramètres ci-dessous permettent de localiser et placer chaque information du cours sur la fiche d'absence.
+$CellIDFICHE = 'A1';//Emplacement de l'ID de la fiche d'absence
 $CellDate = 'E2'; //Emplacement de la date
 $ColNom = 'D'; //Emplacement du nom de chaque étudiant
 $ColPrenom = 'E'; //Emplacement du prénom de chaque étudiant
@@ -36,6 +37,7 @@ $Etudiantparpage = 20;//Ligne correspondant au dernier étudiant de la liste, su
 $CellFiliereCours1 ='F2'; //Emplacement de la filière concernée
 $CellAnneeCours1 ='G2'; //Emplacement de l'année d'étude de la classe concernée
 $CellModuleCours1 ='F3'; //Emplacement du module concerné
+$CellHeureCours1 ='G3'; //Emplacement du début de l'heure du cours
 $CellTypeCours1 ='H3'; //Emplacement du type de cours (CM, TD, TP)
 $CellEnseignantCours1 ='F4'; //Emplacement du nom de l'enseignant concerné.
 
