@@ -141,16 +141,21 @@
     //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Mpdf');
     $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
 
-    $ListeEtudiants='';
-    $ladate = '2020-11-21 08:00:00';
     
-    /*
-    $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (listeetudiants,dateday,filiere,promo) VALUES ('.$ListeEtudiants.','.$_POST['date'].','.$_POST['filiere'].','.(int)$_POST['promo'].')');
-    */
+    $ladate = $_POST['Date']." 00:00:00";
+    
+    
+    $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (dateday,filiere,promo) VALUES ('.'"'.$ladate.'"'.','.'"'.$_POST['filiere'].'"'.','."'".$_POST['promo']."'".')');
+
+    $bddidfiche = $bdd->query('SELECT MAX(idfiche) FROM '.$bdName.'.fichesabsences');
+    $idfiche = $bddidfiche->fetchall();
+    $iddelafiche = $idfiche[0]['MAX(idfiche)'];
+
+    $spreadsheet->getActiveSheet()->setCellValue($CellIDFICHE, $iddelafiche);
 
 
     $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);
-    $pdf_path = 'Ficheaimprimer.pdf';
+    $pdf_path = 'Fiche a imprimer/Ficheaimprimer.pdf';
     
     $writer->save($pdf_path);
 
@@ -159,7 +164,7 @@
 
     echo('Fiche prête pour impression');
     echo('<br/>');
-    echo('<a href="Ficheaimprimer.pdf">Afficher le PDF pour impression</a>')
+    echo('<a href="Fiche a imprimer/Ficheaimprimer.pdf">Afficher le PDF pour impression</a>')
     
     ?>
     </h4>

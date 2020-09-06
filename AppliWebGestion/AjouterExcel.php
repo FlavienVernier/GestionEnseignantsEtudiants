@@ -39,9 +39,9 @@
         //$sheetData est un tableau qui détient toutes les informations présentes dans les cellules de la page active.
         //C'est ce tableau qui va être exploitée et lu pour extraire les informations du fichier Excel.
         $GroupeTDtemp ='';//Variable qui va concerver l'information sur le groupe de TD de l'étudiant à ajouter
-        $annee = substr($sheetData[2]['G'], 5, 4); //Variable de l'année d'étude de l'étudiant (ou la liste d'étudiants)
+        $annee = substr($sheetData[$LiAnnee][$ColAnnee], 5, 4); //Variable de l'année d'étude de l'étudiant (ou la liste d'étudiants)
         $promo = $annee + 5 - $anneescolaire;// On calcule l'année de promotion de l'étudiant selon l'année scolaire en cours et son année d'étude
-        $spe = $sheetData[1]['E'];//Variable qui va concerver l'information sur la filière l'étudiant à ajouter
+        $spe = $sheetData[$LiSpe][$ColSpe];//Variable qui va concerver l'information sur la filière l'étudiant à ajouter
         if ($sheetIndex==0 or $sheetIndex==1){//Sur le fichier exemple à traiter, seul les 2 premère pages contenaient des liste d'étudiants à ajouter à la base de données. La 3ème page correspondait à des notes, et ne correspondaient pas au projet.
             for ($i = $LiEleve1er; $i <= $LiEleveDer; $i++){//On parcours les lignes du fichier Excel sur lequelles les informations des étudiants sont présents
                 //Le nom du groupe de TP ou du groupe de TD de l'étudiant ne sont précisés que sur une seule ligne du fichier Excel

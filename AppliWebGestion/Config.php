@@ -10,6 +10,10 @@ $webServer = '';// ???
 
 
 //Paramètres pour AjouterExcel.php
+$LiSpe = 1; // Ligne ou est renseigné la filière de l'étudiant
+$ColSpe = 'E'; // Colonne ou est renseigné la filière de l'étudiant
+$LiAnnee = 2; // Ligne ou est renseigné l'année d'étude de l'étudiant
+$ColAnnee = 'G'; // Colonne ou est renseigné l'année d'étude de l'étudiant
 $LiEleve1er = 7; // Première ligne sur le fichier Excel sur lequel se trouve les données sur le 1er étudiant de la liste.
 $ColTP = 'A'; // Numéro de colonne ou se trouve le nom du groupe de TP de l'étudiant
 $Colnom = 'E'; // Numéro de colonne ou se trouve le nom de l'étudiant 
