@@ -22,6 +22,7 @@
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     //print_r($_POST);
+    print_r($_POST['idcours1']);
 
     $dataetudiants = $bdd->query('SELECT nom, prenom FROM '.$bdName.'.etudiant WHERE (filiere="'.$_POST['filiere'].'") and (promo='.$_POST['promo'].')');
     $etudiants = $dataetudiants->fetchall();
@@ -44,6 +45,8 @@
     $spreadsheet->setActiveSheetIndexByName($loadedSheetNames[0]);
 
     $spreadsheet->getActiveSheet()->setCellValue($CellDate, $_POST['Date']);
+
+    $idlescours='';//Variable pour stocker l'ensemble des ID des cours, dans l'ordre, pour l'associer à la fiche d'absence dans la table fichesabsences.
     for($i=1; $i<=$_POST['ncours'];$i++){
         if($i==1){
             //Position des cellules à remplacer
@@ -58,6 +61,7 @@
             $module='module1';
             $enseignant='enseignant1';
             $heure='heure1';
+            $idlescours=$idlescours.$_POST['idcours1'].';'; //Ajout de l'id du cours à la chaîne idlescours
         }
         if($i==2){
             $CellFiliere = $CellFiliereCours2;
@@ -70,6 +74,7 @@
             $module='module2';
             $enseignant='enseignant2';
             $heure='heure2';
+            $idlescours=$idlescours.$_POST['idcours2'].';';
         }
         if($i==3){
             $CellFiliere = $CellFiliereCours3;
@@ -82,6 +87,7 @@
             $module='module3';
             $enseignant='enseignant3';
             $heure='heure3';
+            $idlescours=$idlescours.$_POST['idcours3'].';';
         }
         if($i==4){
             $CellFiliere = $CellFiliereCours4;
@@ -94,6 +100,7 @@
             $module='module4';
             $enseignant='enseignant4';
             $heure='heure4';
+            $idlescours=$idlescours.$_POST['idcours4'].';';
         }
         if($i==5){
             $CellFiliere = $CellFiliereCours5;
@@ -106,6 +113,7 @@
             $module='module5';
             $enseignant='enseignant5';
             $heure='heure5';
+            $idlescours=$idlescours.$_POST['idcours5'].';';
         }
         
         
@@ -143,9 +151,11 @@
 
     
     $ladate = $_POST['Date']." 00:00:00";
+
+
+
     
-    
-    $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (dateday,filiere,promo) VALUES ('.'"'.$ladate.'"'.','.'"'.$_POST['filiere'].'"'.','."'".$_POST['promo']."'".')');
+    $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (dateday,filiere,promo,iddescours) VALUES ('.'"'.$ladate.'"'.','.'"'.$_POST['filiere'].'"'.','."'".$_POST['promo']."'".','.'"'.$idlescours.'"'.')');
 
     $bddidfiche = $bdd->query('SELECT MAX(idfiche) FROM '.$bdName.'.fichesabsences');
     $idfiche = $bddidfiche->fetchall();

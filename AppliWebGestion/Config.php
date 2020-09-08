@@ -10,6 +10,8 @@ $webServer = '';// ???
 
 
 //Paramètres pour AjouterExcel.php
+$LiAnneeEtu = 1; // Ligne ou est renseigné l'année d'étude de l'étudiant
+$ColAnneeEtu = 'F'; // Colonne ou est renseigné l'année d'étude de l'étudiant
 $LiSpe = 1; // Ligne ou est renseigné la filière de l'étudiant
 $ColSpe = 'E'; // Colonne ou est renseigné la filière de l'étudiant
 $LiAnnee = 2; // Ligne ou est renseigné l'année d'étude de l'étudiant

@@ -48,7 +48,8 @@
     echo('<input type="hidden" name=Date value='.$_POST['Date'].' />');
     $ncours=0;
     for ($i=0; $i<count($idcours);$i++){
-        $datalecours = $bdd->query('SELECT type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (idcours='.$idcours[$i]['idcours'].') and (datecours LIKE "'.$_POST['Date'].'%'.'")');
+        $datalecours = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (idcours='.$idcours[$i]['idcours'].') and (datecours LIKE "'.$_POST['Date'].'%'.'") ORDER BY datecours');
+        //$datalecours = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE ( idcours IN '.'"'.implode(",", $idcours[$i]).'"'.') and (datecours LIKE "'.$_POST['Date'].'%'.'") ORDER BY datecours');
         $lecours = $datalecours->fetchall();
         
         if (count($lecours)!=0){
@@ -80,6 +81,7 @@
             }
             echo(' | Enseignant : '.$nomduprof.'');
             echo('<br/>');
+            echo('<input type="hidden" name='.'idcours'.$ncours.' value='.$lecours[0]['idcours'].' />');
             echo('<input type="hidden" name='.'type'.$ncours.' value='.$typecours.' />');
             echo('<input type="hidden" name='.'module'.$ncours.' value='.$nomdumodule.' />');
             echo('<input type="hidden" name='.'enseignant'.$ncours.' value='.$nomduprof.' />');
