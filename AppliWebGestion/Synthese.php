@@ -33,7 +33,6 @@
                     $parcoureur = '';
                 }
             }
-
             echo('<form method="post" action="UpdateBDD.php">');
             for ($i = 0; $i < count($etudiants); $i++){
                 for($j=0; $j < count($arrayID); $j++){
@@ -43,15 +42,18 @@
                     else{
                         echo('au cours '.($j+1).'');
                     }
-                    echo('<input type="checkbox" name="'.$etudiants[$i]['idetudiant'].';'.$arrayID[$j].'" value="1">');
+                    echo('<input type="checkbox" name="'.$etudiants[$i]['idetudiant'].';'.$arrayID[$j].'" value="'.$etudiants[$i]['idetudiant'].';'.$arrayID[$j].';'.'">');
                 }
                 echo(' Absent à tous les cours de la journée');
-                echo('<input type="checkbox" name="'.$etudiants[$i]['idetudiant'].'" value="1">');
+                echo('<input type="checkbox" name="'.$etudiants[$i]['idetudiant'].'" value="'.$etudiants[$i]['idetudiant'].';'.$_POST['iddescours'].'">');
                 echo(''.$etudiants[$i]['nom'].' '.$etudiants[$i]['prenom'].'');
+                echo('<br/>');
                 echo('<br/>');    
             }
+            $listcours=serialize($arrayID);
             echo('<input type="hidden" name="filiere" value='.$_POST['filiere'].' />');
             echo('<input type="hidden" name="promo" value='.$_POST['promo'].' />');
+            echo('<input type="hidden" name="iddescours" value='.$listcours.' />');
             echo('<h2>');
             echo('<input type="submit" value="Valider"/>');
             echo('</h2>');
