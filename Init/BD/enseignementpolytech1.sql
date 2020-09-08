@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3308
--- Généré le :  Dim 06 sep. 2020 à 21:33
+-- Généré le :  mar. 08 sep. 2020 à 15:54
 -- Version du serveur :  5.7.28
 -- Version de PHP :  7.3.12
 
@@ -39,10 +39,7 @@ CREATE TABLE IF NOT EXISTS `cours` (
   PRIMARY KEY (`idcours`),
   KEY `foreign_key_idmodule` (`idmodule`),
   KEY `foreign_key_enseignant` (`idenseignant`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
-
-
-
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 
 -- --------------------------------------------------------
@@ -63,9 +60,6 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -82,8 +76,7 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
   `groupetd` varchar(15) NOT NULL,
   `groupetp` varchar(15) NOT NULL,
   PRIMARY KEY (`idetudiant`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 
 -- --------------------------------------------------------
@@ -98,9 +91,9 @@ CREATE TABLE IF NOT EXISTS `fichesabsences` (
   `dateday` datetime NOT NULL,
   `filiere` enum('EBE','IAI','IDU','ITII','ITII-CM','ITII-MP','MM') NOT NULL,
   `promo` int(11) NOT NULL,
+  `iddescours` text NOT NULL,
   PRIMARY KEY (`idfiche`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 
 -- --------------------------------------------------------
@@ -139,8 +132,6 @@ CREATE TABLE IF NOT EXISTS `module` (
   KEY `foreign_key_enseignant` (`idenseignant`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
-
-
 -- --------------------------------------------------------
 
 --
@@ -156,7 +147,6 @@ CREATE TABLE IF NOT EXISTS `presence` (
   KEY `foreign_key_etudiant` (`idetudiant`),
   KEY `foreign_key_cours` (`idcours`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 
 --
