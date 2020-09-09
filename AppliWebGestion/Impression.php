@@ -22,7 +22,6 @@
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     //print_r($_POST);
-    print_r($_POST['idcours1']);
 
     $dataetudiants = $bdd->query('SELECT nom, prenom FROM '.$bdName.'.etudiant WHERE (filiere="'.$_POST['filiere'].'") and (promo='.$_POST['promo'].')');
     $etudiants = $dataetudiants->fetchall();
@@ -36,12 +35,12 @@
     use PhpOffice\PhpSpreadsheet\Style\Style;
     use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
     
-    $inputFileType = IOFactory::identify('Liste_IDU3_S6FicheAbsenceUPDATED.ods');
+    $inputFileType = IOFactory::identify($NomFichierModele);
     $reader = IOFactory::createReader($inputFileType);
-    $reader->setReadDataOnly(false);
-    $spreadsheet = $reader->load('Liste_IDU3_S6FicheAbsenceUPDATED.ods');
+    $spreadsheet = $reader->load($NomFichierModele);
 
     $loadedSheetNames = $spreadsheet->getSheetNames();
+
     $spreadsheet->setActiveSheetIndexByName($loadedSheetNames[0]);
 
     $spreadsheet->getActiveSheet()->setCellValue($CellDate, $_POST['Date']);

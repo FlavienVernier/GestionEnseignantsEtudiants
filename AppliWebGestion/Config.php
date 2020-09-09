@@ -30,6 +30,7 @@ $typecours='TP';//Par défaut, le cours est considéré comme un TP.
 
 //Paramètres pour Impression.php
 // Les paramètres ci-dessous permettent de localiser et placer chaque information du cours sur la fiche d'absence.
+$NomFichierModele = 'Liste_IDU3_S6FicheAbsenceUPDATED.ods';//Nom entier du fichier Modèle utilisé pour réutiliser le formatage de la fiche d'absence.
 $CellIDFICHE = 'A1';//Emplacement de l'ID de la fiche d'absence
 $CellDate = 'E2'; //Emplacement de la date
 $ColNom = 'D'; //Emplacement du nom de chaque étudiant
