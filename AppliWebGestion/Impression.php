@@ -38,7 +38,7 @@
     $inputFileType = IOFactory::identify($NomFichierModele);
     $reader = IOFactory::createReader($inputFileType);
     $spreadsheet = $reader->load($NomFichierModele);
-    $spreadsheet->getDefaultStyle()->getFont()->setSize(14);
+    $spreadsheet->getDefaultStyle()->getFont()->setSize(13);
 
     $loadedSheetNames = $spreadsheet->getSheetNames();
 
@@ -50,7 +50,7 @@
     for($i=1; $i<=$_POST['ncours'];$i++){
         if($i==1){
             //Position des cellules à remplacer
-            $CellFiliere = $CellFiliereCours1;
+            //$CellFiliere = $CellFiliereCours1;
             $CellAnnee = $CellAnneeCours1;
             $CellModule = $CellModuleCours1;
             $CellHeure = $CellHeureCours1;
@@ -64,7 +64,7 @@
             $idlescours=$idlescours.$_POST['idcours1'].';'; //Ajout de l'id du cours à la chaîne idlescours
         }
         if($i==2){
-            $CellFiliere = $CellFiliereCours2;
+            //$CellFiliere = $CellFiliereCours2;
             $CellAnnee = $CellAnneeCours2;
             $CellModule = $CellModuleCours2;
             $CellHeure = $CellHeureCours2;
@@ -77,7 +77,7 @@
             $idlescours=$idlescours.$_POST['idcours2'].';';
         }
         if($i==3){
-            $CellFiliere = $CellFiliereCours3;
+            //$CellFiliere = $CellFiliereCours3;
             $CellAnnee = $CellAnneeCours3;
             $CellModule = $CellModuleCours3;
             $CellHeure = $CellHeureCours3;
@@ -90,7 +90,7 @@
             $idlescours=$idlescours.$_POST['idcours3'].';';
         }
         if($i==4){
-            $CellFiliere = $CellFiliereCours4;
+            //$CellFiliere = $CellFiliereCours4;
             $CellAnnee = $CellAnneeCours4;
             $CellModule = $CellModuleCours4;
             $CellHeure = $CellHeureCours4;
@@ -103,7 +103,7 @@
             $idlescours=$idlescours.$_POST['idcours4'].';';
         }
         if($i==5){
-            $CellFiliere = $CellFiliereCours5;
+            //$CellFiliere = $CellFiliereCours5;
             $CellAnnee = $CellAnneeCours5;
             $CellModule = $CellModuleCours5;
             $CellHeure = $CellHeureCours5;
@@ -117,8 +117,8 @@
         }
         
         
-        $spreadsheet->getActiveSheet()->setCellValue($CellFiliere, $_POST['filiere']);
-        $spreadsheet->getActiveSheet()->setCellValue($CellAnnee, $_POST['annee']);
+        //$spreadsheet->getActiveSheet()->setCellValue($CellFiliere, $_POST['filiere']);
+        $spreadsheet->getActiveSheet()->setCellValue($CellAnnee, $_POST['filiere'].'-'.$_POST['annee']);
         $spreadsheet->getActiveSheet()->setCellValue($CellModule, $_POST[$module]);
         $spreadsheet->getActiveSheet()->setCellValue($CellHeure, $_POST[$heure]);
         $spreadsheet->getActiveSheet()->setCellValue($CellType, $_POST[$type]);
@@ -136,19 +136,36 @@
         }
     }
     
-    //$spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A2:X24,A26:X48');
-    //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-    //$spreadsheet->getActiveSheet()->getStyle('F2:H4')->getFill()->getStartColor()->setARGB('FF9E9E9E');
-    //$spreadsheet->getActiveSheet()->setShowGridlines(true);
-
-    //$sheetData = $spreadsheet->getActiveSheet()->toArray(true, true, true, true);
-    //var_dump($sheetData);
-
-    //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, "Ods");
-    //$writer->save("Ficheaimprimer.ods");
-
-    //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Mpdf');
+    
     $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
+
+    for ($i=$FirstLigneEtu1;$i<=$LastLigneEtu1;$i++){
+        $spreadsheet->getActiveSheet()->getRowDimension((string)$i)->setRowHeight($HauteurLigneEtudiant);
+        $spreadsheet->getActiveSheet()->getStyle((string)$ColNom.$i)->getFont()->setSize($HauteurLigneEtudiant/2);
+        $spreadsheet->getActiveSheet()->getStyle((string)$ColPrenom.$i)->getFont()->setSize($HauteurLigneEtudiant/2);
+    }
+    for ($i=$FirstLigneEtu2;$i<=50;$i++){
+        $spreadsheet->getActiveSheet()->getRowDimension((string)$i)->setRowHeight($HauteurLigneEtudiant);
+        $spreadsheet->getActiveSheet()->getStyle((string)$ColNom.$i)->getFont()->setSize($HauteurLigneEtudiant/2);
+        $spreadsheet->getActiveSheet()->getStyle((string)$ColPrenom.$i)->getFont()->setSize($HauteurLigneEtudiant/2);
+    }
+    
+
+    /*
+    $styleArray = [
+        'font' =>[
+        'size' => \PhpOffice\PhpSpreadsheet\Style\Font::setSize(18)
+        ]     
+    ];
+
+    $worksheet->getStyle($ColNom.':'.$FirstLigneEtu1.','.$ColPrenom.'50')->applyFromArray($styleArray);
+    */
     //$spreadsheet->getActiveSheet()->setShowGridlines(true);
     //$spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:X35');
     
@@ -158,16 +175,13 @@
     
     $ladate = $_POST['Date']." 00:00:00";
 
-
-
-    
     $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (dateday,filiere,promo,iddescours) VALUES ('.'"'.$ladate.'"'.','.'"'.$_POST['filiere'].'"'.','."'".$_POST['promo']."'".','.'"'.$idlescours.'"'.')');
 
     $bddidfiche = $bdd->query('SELECT MAX(idfiche) FROM '.$bdName.'.fichesabsences');
     $idfiche = $bddidfiche->fetchall();
     $iddelafiche = $idfiche[0]['MAX(idfiche)'];
 
-    $spreadsheet->getActiveSheet()->setCellValue($CellIDFICHE, $iddelafiche);
+    $spreadsheet->getActiveSheet()->setCellValue($CellIDFICHE, 'ID : '.$iddelafiche);
 
 
     $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);

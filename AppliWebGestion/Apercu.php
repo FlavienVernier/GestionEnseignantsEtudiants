@@ -54,8 +54,8 @@
         
         if (count($lecours)!=0){
             $ncours+=1;
-            $nomdumodule='Nonrenseigné';
-            $nomduprof='Nonrenseigné:';
+            $nomdumodule='N/A';
+            $nomduprof='N/A';
             $typecours = $lecours[0]['type'];
             $duration = $lecours[0]['duree']*60;
             $durationheure = intdiv($duration,60);
