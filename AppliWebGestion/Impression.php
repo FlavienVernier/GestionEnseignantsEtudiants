@@ -38,6 +38,7 @@
     $inputFileType = IOFactory::identify($NomFichierModele);
     $reader = IOFactory::createReader($inputFileType);
     $spreadsheet = $reader->load($NomFichierModele);
+    $spreadsheet->getDefaultStyle()->getFont()->setSize(14);
 
     $loadedSheetNames = $spreadsheet->getSheetNames();
 
@@ -131,6 +132,7 @@
             }
             $spreadsheet->getActiveSheet()->setCellValue($ColNom.(string)$ligne, $etudiants[$k]['nom']);
             $spreadsheet->getActiveSheet()->setCellValue($ColPrenom.(string)$ligne, $etudiants[$k]['prenom']);
+            $spreadsheet->getActiveSheet()->getStyle($ColNom.(string)$ligne.':X'.(string)$ligne)->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
         }
     }
     
@@ -147,6 +149,11 @@
 
     //$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Mpdf');
     $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+    //$spreadsheet->getActiveSheet()->setShowGridlines(true);
+    //$spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:X35');
+    
+    
+    
 
     
     $ladate = $_POST['Date']." 00:00:00";
