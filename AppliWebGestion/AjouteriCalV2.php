@@ -28,7 +28,7 @@
 
     $ical = new iCalEasyReader();
     $lines = $ical->load(file_get_contents($_FILES["userfile"]["tmp_name"]));
-    var_dump($lines);
+    
     
     //$lines correspond à un array() contenant toutes les informations sur le fichier iCal. Chaque élément de $lines correspond à un cours unique de l'empoi du temps. Ce cours est représenté par un autre array() qui contient plusieurs chaînes de caractères.
     
