@@ -52,8 +52,8 @@
         echo('<input type="hidden" name="Date" value='.$_POST['Date'].' />');
         echo('<input type="hidden" name="filiere" value='.$_POST['filiere'].' />');
         echo('<input type="hidden" name="idcours" value='.$coursincomplets[$i]['idcours'].' />');
-        $nomdumodule='Non renseigné, ajouter :';
-        $nomduprof='Non renseigné, ajouter (nom enseignant):';
+        $nomdumodule='N/A, ajouter :';
+        $nomduprof='N/A, ajouter (nom enseignant):';
         echo('Date et heure : '.$coursincomplets[$i]['datecours'].'');
         if ($coursincomplets[$i]['idmodule'] != NULL){
             $datanommodule = $bdd->query('SELECT nom FROM '.$bdName.'.module WHERE (idmodule='.$coursincomplets[$i]['idmodule'].')');
