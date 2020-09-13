@@ -8,7 +8,7 @@
 
     <body>
         <h1>Cours à Modifier</h1>
-        <h4>Rappel : seul les cours incomplets sont affichés
+        <h4>Rappel : seuls les cours incomplets sont affichés
         <br/>
 
         
