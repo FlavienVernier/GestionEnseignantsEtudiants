@@ -28,7 +28,7 @@
 
     $ical = new iCalEasyReader();
     $lines = $ical->load(file_get_contents($_FILES["userfile"]["tmp_name"]));
-    var_dump($lines);
+    
     
     //$lines correspond à un array() contenant toutes les informations sur le fichier iCal. Chaque élément de $lines correspond à un cours unique de l'empoi du temps. Ce cours est représenté par un autre array() qui contient plusieurs chaînes de caractères.
     
@@ -40,7 +40,7 @@
         $StringClasseProf = $lines['VEVENT'][$i]['DESCRIPTION']; //On conserve la chaîne de caractères qui contient les filières concernées (avec l'année d'étude) ET le nom de l'enseignant
         $StringAnnee = substr($lines['VEVENT'][$i]['DTSTAMP'], 0, 8); //On prélève l'année du cours
         //Ci-dessous, on détermine l'année d'étude en cours, selon la date actuelle
-        if ((int)substr($StringAnnee, 4, 2)<=9){//ATTENTION, a modifier en fin de projet (remplacer 9 par 7)
+        if ((int)substr($StringAnnee, 4, 2)<$nouvelanneescolaire){//paramètre $nouvelanneescolaire dans Config.php
             $anneecourante = (int)substr($StringAnnee, 0, 4);
         }
         else{
@@ -83,12 +83,13 @@
             }
             //La condition ci-dessous construit la chaîne du parcoureur dès lors que le caractère rencontré n'est pas autre chose qu'une lettre. Le cas ou le caractère est un chiffre est déjà traîté par la condition précédente.
             if($StringClasseProf[$l]!=' ' and $StringClasseProf[$l]!='-' and $StringClasseProf[$l]!='(' and $StringClasseProf[$l]!="\n"){//ATTENTION, éventuellement, d'autres caractères peu visibles pourraient poser problème.
-                //Le cas particulier du retour à la ligne "\n" pose effectivement soucis lorsque l'on n'y fait pas attention.
+                //Le cas particulier du retour à la ligne "\n" peut déclancher des problèmes.
                 $parcoureur.=$StringClasseProf[$l];
             }
             //La condition ci-dessous est une autre type d'exception. Etant une lettre, on ne pouvait pas la placer dans une des conditions précédentes (auquel cas, les enseignants dont le nom commence par "S" n'auraient pas été reconnues)
             //Il s'agit de l'exception de la présence d'un -S5 ou -S6 (ou autre) devant l'année d'étude, qui n'apporte aucune information utile.
             //Dans la condition ci-dessous, on traîte le cas ou le caractère est un tiret. Ce caractère est TOUJOURS observé après le nom d'une filière. Le parcoureur constuit correspond donc très certainement au nom d'une filière.
+            //En outre, certains prénoms voire noms d'enseignants peut comporter un tiret.
             if($StringClasseProf[$l]=='-'){ 
                 for ($j = 0; $j < count($Listefiliere); $j++){//On parcours les filières déjà existantes dans la base de données
                     if ($parcoureur==$Listefiliere[$j]['filiere']){//Si le parcoureurs correspond bien au nom d'une filière, on l'ajoute à la liste des filières concernées, associée à leur année.

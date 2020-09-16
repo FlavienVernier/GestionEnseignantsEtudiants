@@ -22,7 +22,7 @@
 
     $anneecourante = (int)date('Y');
     $moiscourrant = (int)date('m');
-    if ($moiscourrant >9){//ATTENTION, mettre la limite au mois >7 en fin de projet
+    if ($moiscourrant >=$nouvelanneescolaire){//paramètre $nouvelanneescolaire dans Config.php
         $anneecourante = $anneecourante + 1;
     }
 
@@ -49,7 +49,7 @@
     $ncours=0;
     for ($i=0; $i<count($idcours);$i++){
         $datalecours = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (idcours='.$idcours[$i]['idcours'].') and (datecours LIKE "'.$_POST['Date'].'%'.'") ORDER BY datecours');
-        //$datalecours = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE ( idcours IN '.'"'.implode(",", $idcours[$i]).'"'.') and (datecours LIKE "'.$_POST['Date'].'%'.'") ORDER BY datecours');
+
         $lecours = $datalecours->fetchall();
         
         if (count($lecours)!=0){

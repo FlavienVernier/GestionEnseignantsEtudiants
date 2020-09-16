@@ -189,7 +189,10 @@
     
     $writer->save($pdf_path);
 
-
+    for($i=1; $i<=$_POST['ncours'];$i++){
+        $stringcours = 'idcours'.(string)$i;
+        $bdd->query('UPDATE cours SET idfiche = '.$iddelafiche.' WHERE idcours='.$_POST[$stringcours].'');
+    }
 
 
     echo('Fiche prête pour impression');

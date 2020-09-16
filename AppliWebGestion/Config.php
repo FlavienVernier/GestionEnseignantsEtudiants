@@ -6,7 +6,9 @@ $bdUserPasswd = '';// Mot de passe pour se connecter à la base de données (par
 $bdServer = 'localhost:3308';// Adresse de localisation de la base de données MySQL
 $webServer = '';// ???
 
-
+//Paramètre pour définir le mois après lequel une nouvelle année universitaire commence officiellement
+//Ce paramètre impact AjouteriCalV3 et Aperçu.php.
+$nouvelanneescolaire = 8;//Une fois le mois d'Aout passé, une nouvelle année scolaire commence
 
 
 //Paramètres pour AjouterExcel.php
