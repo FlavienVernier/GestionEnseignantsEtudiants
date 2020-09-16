@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3308
--- Généré le :  mar. 08 sep. 2020 à 15:54
+-- Généré le :  mer. 16 sep. 2020 à 17:00
 -- Version du serveur :  5.7.28
 -- Version de PHP :  7.3.12
 
@@ -36,11 +36,12 @@ CREATE TABLE IF NOT EXISTS `cours` (
   `duree` float NOT NULL,
   `idmodule` int(11) DEFAULT NULL,
   `idenseignant` int(11) DEFAULT NULL,
+  `idfiche` int(11) DEFAULT NULL,
   PRIMARY KEY (`idcours`),
   KEY `foreign_key_idmodule` (`idmodule`),
-  KEY `foreign_key_enseignant` (`idenseignant`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
-
+  KEY `foreign_key_enseignant` (`idenseignant`),
+  KEY `idficheabsence` (`idfiche`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -57,8 +58,7 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
   `service` int(11) NOT NULL,
   `heuresup` enum('oui','non') NOT NULL,
   PRIMARY KEY (`idenseignant`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -76,8 +76,7 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
   `groupetd` varchar(15) NOT NULL,
   `groupetp` varchar(15) NOT NULL,
   PRIMARY KEY (`idetudiant`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -93,8 +92,7 @@ CREATE TABLE IF NOT EXISTS `fichesabsences` (
   `promo` int(11) NOT NULL,
   `iddescours` text NOT NULL,
   PRIMARY KEY (`idfiche`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -130,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `idenseignant` int(11) DEFAULT NULL,
   PRIMARY KEY (`Idmodule`),
   KEY `foreign_key_enseignant` (`idenseignant`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -148,7 +146,6 @@ CREATE TABLE IF NOT EXISTS `presence` (
   KEY `foreign_key_cours` (`idcours`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
 --
 -- Contraintes pour les tables déchargées
 --
@@ -158,7 +155,8 @@ CREATE TABLE IF NOT EXISTS `presence` (
 --
 ALTER TABLE `cours`
   ADD CONSTRAINT `cours_ibfk_1` FOREIGN KEY (`idmodule`) REFERENCES `module` (`Idmodule`),
-  ADD CONSTRAINT `cours_ibfk_2` FOREIGN KEY (`idenseignant`) REFERENCES `enseignant` (`idenseignant`);
+  ADD CONSTRAINT `cours_ibfk_2` FOREIGN KEY (`idenseignant`) REFERENCES `enseignant` (`idenseignant`),
+  ADD CONSTRAINT `idficheabsence` FOREIGN KEY (`idfiche`) REFERENCES `fichesabsences` (`idfiche`);
 
 --
 -- Contraintes pour la table `justification`
