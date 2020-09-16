@@ -117,14 +117,14 @@
         }
         
         
-        //$spreadsheet->getActiveSheet()->setCellValue($CellFiliere, $_POST['filiere']);
+        //Ces lignes permettent de positionner l'information de chaque cours à sa cellule dédiée
         $spreadsheet->getActiveSheet()->setCellValue($CellAnnee, $_POST['filiere'].'-'.$_POST['annee']);
         $spreadsheet->getActiveSheet()->setCellValue($CellModule, $_POST[$module]);
         $spreadsheet->getActiveSheet()->setCellValue($CellHeure, $_POST[$heure]);
         $spreadsheet->getActiveSheet()->setCellValue($CellType, $_POST[$type]);
         $spreadsheet->getActiveSheet()->setCellValue($CellEnseignant, $_POST[$enseignant]);
-        
 
+        //La boucle for permet de positionner le nom et le prénom de chaque étudiant à chaque ligne, et d'optimiser au mieux l'affichage et le rendu sur la fiche d'absence.
         for($k=0;$k<count($etudiants);$k++){
             $ligne = $FirstLigneEtu1+$k;
             if($ligne>$LastLigneEtu1){
@@ -136,13 +136,8 @@
         }
     }
     
-    
+    //Ces lignes permettent de mieux optimiser l'affichage de la fiche d'absence
     $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
-    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
-    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
-    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
-    $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
     $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(0);
 
     for ($i=$FirstLigneEtu1;$i<=$LastLigneEtu1;$i++){
@@ -156,25 +151,10 @@
         $spreadsheet->getActiveSheet()->getStyle((string)$ColPrenom.$i)->getFont()->setSize($HauteurLigneEtudiant/2);
     }
     
-
-    /*
-    $styleArray = [
-        'font' =>[
-        'size' => \PhpOffice\PhpSpreadsheet\Style\Font::setSize(18)
-        ]     
-    ];
-
-    $worksheet->getStyle($ColNom.':'.$FirstLigneEtu1.','.$ColPrenom.'50')->applyFromArray($styleArray);
-    */
-    //$spreadsheet->getActiveSheet()->setShowGridlines(true);
-    //$spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:X35');
-    
-    
-    
-
     
     $ladate = $_POST['Date']." 00:00:00";
 
+    //On créé une fiche d'absence dans la table "fichesabsences" afin de pouvoir extraire son identifiant pour l'afficher sur la fiche
     $bdd->query('INSERT INTO '.$bdName.'.fichesabsences (dateday,filiere,promo,iddescours) VALUES ('.'"'.$ladate.'"'.','.'"'.$_POST['filiere'].'"'.','."'".$_POST['promo']."'".','.'"'.$idlescours.'"'.')');
 
     $bddidfiche = $bdd->query('SELECT MAX(idfiche) FROM '.$bdName.'.fichesabsences');
@@ -189,6 +169,7 @@
     
     $writer->save($pdf_path);
 
+    //On associe les cours concernés à la fiche d'absence dans la base de données
     for($i=1; $i<=$_POST['ncours'];$i++){
         $stringcours = 'idcours'.(string)$i;
         $bdd->query('UPDATE cours SET idfiche = '.$iddelafiche.' WHERE idcours='.$_POST[$stringcours].'');

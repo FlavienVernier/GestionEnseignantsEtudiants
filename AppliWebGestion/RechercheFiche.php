@@ -19,13 +19,13 @@
 
             $ladate = $_POST['Date']." 00:00:00";
 
+            //Le code ci-dessous va relever tous les identifiants de cours associé à la date rentrée, et va tous les afficher, et proposer de le sélectionner avec un bouton
             $dataid = $bdd->query('SELECT idfiche, filiere, promo, iddescours FROM '.$bdName.'.fichesabsences WHERE (dateday = '.'"'.$ladate.'"'.')');
             $id = $dataid->fetchAll();
 
             for ($i = 0; $i < count($id); $i++){
                 echo('<form method="post" action="Synthese.php">');
                 echo('Fiche : '.$id[$i]['idfiche'].' <input type="submit" value="Sélectionner"/>');
-                //echo('<input type="hidden" name="idfiche" value='.$id[$i]['idfiche'].' />');
                 echo('<input type="hidden" name="filiere" value='.$id[$i]['filiere'].' />');
                 echo('<input type="hidden" name="promo" value='.$id[$i]['promo'].' />');
                 echo('<input type="hidden" name="iddescours" value='.$id[$i]['iddescours'].' />');

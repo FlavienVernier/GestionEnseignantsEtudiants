@@ -16,11 +16,12 @@
             $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
             $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            
-
+            //Selon l'ID de la fiche sélectionné, des requetes SQL vont être réalisés dans le but de reproduire la fiche d'absence, en affichant les noms et prénoms des étudiants, avec une case à cocher pour chaque cours et chaque étudiant
             $dataetudiants = $bdd->query('SELECT idetudiant, nom, prenom FROM '.$bdName.'.etudiant WHERE (filiere = '.'"'.$_POST['filiere'].'"'.' AND promo = '.$_POST['promo'].')');
             $etudiants = $dataetudiants->fetchAll();
 
+            //La liste de l'ensemble des cours est enregistrée dans une chaîne de caractère dans la base de données. Cela permet d'associer une fiche d'absence a tous les cours.
+            //Le code ci-dessous permet de convertir cette chaîne de caractère en un array qui contient un élément pour chaque cours, son identifiant.
             $iddescours = $_POST['iddescours'];
             $parcoureur = '';
             $arrayID = array();
@@ -34,6 +35,8 @@
                 }
             }
             echo('<form method="post" action="UpdateBDD.php">');
+            //Pour chaque étudiant et chaque cours, on va générer une case a cocher (par formulaire), dont la valeur est une chaîne de caractère qui concatène l'ID de l'étudiant d'une part, puis l'ID du cours d'autre part, séparé par un point virgule
+            //On met également une case a coché au cas ou l'étudiant a été absent de la journée, a tous les cours
             for ($i = 0; $i < count($etudiants); $i++){
                 for($j=0; $j < count($arrayID); $j++){
                     if($j==0){
@@ -50,7 +53,7 @@
                 echo('<br/>');
                 echo('<br/>');    
             }
-            $listcours=serialize($arrayID);
+            $listcours=serialize($arrayID);//Permet de transmettre un array par la méthode POST
             echo('<input type="hidden" name="filiere" value='.$_POST['filiere'].' />');
             echo('<input type="hidden" name="promo" value='.$_POST['promo'].' />');
             echo('<input type="hidden" name="iddescours" value='.$listcours.' />');

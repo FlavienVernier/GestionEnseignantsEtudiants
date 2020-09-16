@@ -14,11 +14,13 @@
             $bdd = new PDO('mysql:host='.$bdServer.';dbname='.$bdName.';charset=utf8', $bdUser, $bdUserPasswd);
             $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+            //On génère de nouveau tous les ID d'étudiants à partir de la filière et de la promo
             $dataetudiants = $bdd->query('SELECT idetudiant FROM '.$bdName.'.etudiant WHERE (filiere = '.'"'.$_POST['filiere'].'"'.' AND promo = '.$_POST['promo'].')');
             $etudiants = $dataetudiants->fetchAll();
 
-            $listedetouslescours=unserialize($_POST['iddescours']);
-            //Gestion de tous les étudiants marqués absent sur le formulaire
+            $listedetouslescours=unserialize($_POST['iddescours']);//Reconvertit l'array transmis par la méthode POST pour être exploitable et lisible
+            //ci-dessous, on parcours chaque élément $_POST, qui contient un élément pour chaque case cochée, correspond à un élève absent a un cours.
+            //On sépare l'ID de l'étudiant à (ou aux) ID du cours a l'aide du caractère point virgule qui sert de repère et de distinction des ID. Ainsi, les autres éléments présents dans la méthode POST (la filière, la promo, puis plus tard, groupe TD et groupe TP) ne prendront pas en compte ces oppérations, car ils ne contiennent pas le caractère "point virgule"
             foreach($_POST as $k){
                 $parcoureur = '';
                 $idetu=0;
@@ -29,16 +31,16 @@
                     }
                     else{
                         if ($idetu==0){
-                            $idetu=(int)$parcoureur;
+                            $idetu=(int)$parcoureur;//Le premier élément trouvé est l'ID de l'étudiant
                         }
                         else{
-                            array_push($iddescours,$parcoureur);
+                            array_push($iddescours,$parcoureur);//Les éléments suivants sont des ID de cours
                         }
                         $parcoureur = '';
                     }
                     
                 }
-                
+                //On met a jour la table présence selon les étudiants absents
                 if ($idetu!=0){
                     foreach($iddescours as $c){
                         $bdd->query('UPDATE presence SET presence = "absent" WHERE idetudiant='.$idetu.' and idcours='.$c.' and presence is NULL');

@@ -20,6 +20,8 @@
 
     $lesmois=['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
+    //Cette page permet de visualiser l'ensemble des cours de la journée avant de générer le PDF à imprimer.
+    //Ci-dessous, processus pour convertir correctement l'année de promotion à l'année d'étude
     $anneecourante = (int)date('Y');
     $moiscourrant = (int)date('m');
     if ($moiscourrant >=$nouvelanneescolaire){//paramètre $nouvelanneescolaire dans Config.php
@@ -27,16 +29,19 @@
     }
 
     $promo = $anneecourante + 5 - $_POST['annee'];
-    //print_r($promo);
 
+
+    //On relève un identifiant d'étudiant "modèle" pour ensuite relever tous les cours que suit cet élève, qui représente son groupe.
+    //Nous souhaitions obtenir une liste de cours qui concernent les cours suivits par un groupe d'étudiants pour la journée.
+    //Toutefois, on ne peut pas obtenir cette liste de cours avec une requête SQL. J'étais obligé de devoir passer par 3 requêtes SQL pour obtenir tous les cours relatifs à un groupe d'étudiants qui correspondent à la date donnée.
+    //Les 2 premières requetes ci-dessous
     $dataidetudiant = $bdd->query('SELECT MIN(idetudiant) FROM '.$bdName.'.etudiant WHERE (filiere="'.$_POST['filiere'].'" and promo='.$promo.')');
     $idetudiant = $dataidetudiant->fetchall();
 
     $dataidcours = $bdd->query('SELECT idcours FROM '.$bdName.'.presence WHERE (idetudiant='.$idetudiant[0]['MIN(idetudiant)'].')');
     $idcours = $dataidcours->fetchall();
 
-    //print_r($idetudiant[0]['MIN(idetudiant)']);      
-    //substr($_POST['Date'],0,2)
+    //On prépare les informations à transmettre lors de l'impression de la fiche d'absence
     echo('<h5>');
     echo('Jour : '.substr($_POST['Date'],8,2).' '.$lesmois[(int)substr($_POST['Date'],5,2)].' '.substr($_POST['Date'],0,4));
     echo(' | Classe : '.$_POST['filiere'].' '.$_POST['annee']);
@@ -46,18 +51,22 @@
     echo('<input type="hidden" name=promo value='.$promo.' />');
     echo('<input type="hidden" name=annee value='.$_POST['annee'].' />');
     echo('<input type="hidden" name=Date value='.$_POST['Date'].' />');
+
+    //On va transmettre par la méthode POST les informations relatifs à chaque cours, pour les faires afficher sur la fiche d'absence à des endroits différents. La variable $ncours permet de différencier les 5 cours.
     $ncours=0;
+    
     for ($i=0; $i<count($idcours);$i++){
+        //La 3eme requete SQL est réalisée ici, une fois pour chaque cours
         $datalecours = $bdd->query('SELECT idcours, type, datecours, duree, idmodule, idenseignant FROM '.$bdName.'.cours WHERE (idcours='.$idcours[$i]['idcours'].') and (datecours LIKE "'.$_POST['Date'].'%'.'") ORDER BY datecours');
 
         $lecours = $datalecours->fetchall();
         
         if (count($lecours)!=0){
             $ncours+=1;
-            $nomdumodule='N/A';
+            $nomdumodule='N/A';//Le nom du module et de l'enseignant ne sont pas forcément indiqués
             $nomduprof='N/A';
             $typecours = $lecours[0]['type'];
-            $duration = $lecours[0]['duree']*60;
+            $duration = $lecours[0]['duree']*60; //Calcul de la durée du cours
             $durationheure = intdiv($duration,60);
             $durationminutes = $duration%60;
             $finminute = $durationminutes + (int)substr($lecours[0]['datecours'],14,2);
@@ -67,14 +76,14 @@
             }
             $heurefin = (int)substr($lecours[0]['datecours'],11,2) + $durationheure;
             echo(''.substr($lecours[0]['datecours'],11,2).'h'.substr($lecours[0]['datecours'],14,2).' - '.$heurefin.'h'.$finminute.'');
-            if ($lecours[0]['idmodule'] != NULL){
+            if ($lecours[0]['idmodule'] != NULL){//Attribution du nom du module si il est précisé
                 $datanommodule = $bdd->query('SELECT nom FROM '.$bdName.'.module WHERE (idmodule='.$lecours[0]['idmodule'].')');
                 $nommodule= $datanommodule->fetchall();
                 $nomdumodule = $nommodule[0]['nom'];
             }
             echo(' | Module : '.$nomdumodule.'');
         
-            if ($lecours[0]['idenseignant'] != NULL){
+            if ($lecours[0]['idenseignant'] != NULL){//Attribution du nom de l'enseignant si il est précisé
                 $datanomprof = $bdd->query('SELECT nom FROM '.$bdName.'.enseignant WHERE (idenseignant='.$lecours[0]['idenseignant'].')');
                 $nomprof= $datanomprof->fetchall();
                 $nomduprof = $nomprof[0]['nom'];    
